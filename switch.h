@@ -51,13 +51,21 @@ public:
     // printf("\n");
     if (header->ether_type == ETHER_CONTROL_TYPE) {
       forward_table_item * p = NULL;
-      for (forward_table_item * iter = forward_table; iter->next != NULL; iter = iter->next) {
+      forward_table_item * iter = forward_table;
+      while (iter->next != NULL) {
         p = iter->next;
         p->counter--;
+        // printf("\033[0;34m Age an item \033[0m : port = %d, age = %d, mac=", p->port, p->counter);
+        // char * px = (char *)&p->addr;
+        // for (int i=0; i<6; i++) 
+        //   printf("%02x ", (unsigned char)px[i]);
+        // printf("\n");
         if (p->counter == 0) {
           iter->next = p->next; 
-          delete p;
+          delete p; 
+          // printf("\033[0;32m ok \033[0m \n");
         }
+        else iter = iter->next;
       }
       return -1;
     }
